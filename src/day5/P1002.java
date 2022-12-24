@@ -26,19 +26,30 @@ public class P1002 {
                 visited[newX][newY] = true;
             }
         }
-        for (int i = 0; i < n+1; i++) {
-            a[i][0] = 1L;
-        }
-        for (int i = 0; i < m+1; i++) {
-            a[0][i] = 1L;
+
+        // Long类型的数组需要初始化，不然会空指针异常
+        for (int i = 0; i < a.length; i++) {
+            for (int j = 0; j < a[i].length; j++) {
+                a[i][j] = 0L;
+            }
         }
 
-        for (int i = 1; i < n + 1; i++) {
-            for (int j = 1; j < m + 1; j++) {
+        // 原点初始化为1
+        a[0][0] = 1L;
+        for (int i = 0; i < n + 1; i++) {
+            for (int j = 0; j < m + 1; j++) {
+                // 如果原点在马的控制范围内，则最终答案为0
+                //
                 if (visited[i][j]) {
                     a[i][j] = 0L;
                 } else {
-                    a[i][j] = a[i - 1][j] + a[i][j - 1];
+                    // 聪明的优化，不需要扩容数组，也不需要过多判断
+                    if (i > 0){
+                        a[i][j] += a[i-1][j];
+                    }
+                    if (j > 0){
+                        a[i][j] += a[i][j-1];
+                    }
                 }
             }
         }

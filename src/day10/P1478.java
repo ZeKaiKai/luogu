@@ -39,6 +39,7 @@ public class P1478 {
             data[i] = new data(in.nextInt(), in.nextInt());
         }
 
+        // 按照体力消耗排序，再判断高度是否能够到即可
         Arrays.sort(data);
 
         int count = 0;

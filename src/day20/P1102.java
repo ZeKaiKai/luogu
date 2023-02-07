@@ -41,7 +41,7 @@ public class P1102 {
 
     public static int bSearch(int x, int l, int r) {
         while (l < r) {
-            int mid = (l + r) / 2;
+            int mid = (l + r) / 2;   //寻找下界时，mid偏向l
             if (a[mid] >= x)
                 r = mid;
             else
@@ -52,16 +52,7 @@ public class P1102 {
 
     public static int bSearch_UpperBound(int x, int l, int r) {
         while (l < r) {
-            // 区间长度为2时做特判
-            if (r - l == 1) {
-                if (a[r] == x)
-                    return r;
-                else if (a[l] == x)
-                    return l;
-                else
-                    return -1;
-            }
-            int mid = (l + r) / 2;
+            int mid = (l + r + 1) / 2; //寻找上界时，mid偏向r
             if (a[mid] <= x)
                 l = mid;
             else

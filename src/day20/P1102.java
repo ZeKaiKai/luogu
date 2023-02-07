@@ -5,25 +5,33 @@ import java.util.Arrays;
 
 public class P1102 {
     public static StreamTokenizer st = new StreamTokenizer(new InputStreamReader(System.in));
-    public static PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(System.out)));
+    public static int[] a;
 
     public static void main(String[] args) throws IOException {
         int N = nextInt();
-        long C = nextLong();
-        long[] a = new long[N + 1];
+        int C = nextInt();
+        a = new int[N + 1];
 
-        for (int i = 1; i <= N; i++) {
-            a[i] = nextLong();
-        }
+        for (int i = 1; i <= N; i++)
+            a[i] = nextInt();
 
         Arrays.sort(a, 1, N + 1);
 
-        int i = bSearch(4, a, 1, N); //分界线
+        long cnt = 0;
+        int l = 1;
+        int r1 = 0;
+        int r2 = 0;
+        while (l < N) {
+            // 两行核心代码
+            // 条件变形为A+C=B，遍历a[l]为A，寻找后面有无对应A+C的值即可（连续区间）
+            r1 = bSearch(C+a[l], l, N);
+            r2 = bSearch_UpperBound(C+a[l], l, N);
+            if (r1!=-1 && r2!=-1)
+                cnt += r2-r1+1;
+            l++;
+        }
 
-        int cnt = 0;
-
-        /////////////////////////////////////////////////
-
+        System.out.println(cnt);
     }
 
     public static int nextInt() throws IOException {
@@ -31,12 +39,7 @@ public class P1102 {
         return (int) st.nval;
     }
 
-    public static long nextLong() throws IOException {
-        st.nextToken();
-        return (long) st.nval;
-    }
-
-    public static int bSearch(int x, long[] a, int l, int r) {
+    public static int bSearch(int x, int l, int r) {
         while (l < r) {
             int mid = (l + r) / 2;
             if (a[mid] >= x)
@@ -45,5 +48,25 @@ public class P1102 {
                 l = mid + 1;
         }
         return a[l] == x ? l : -1; //找不到该元素就返回-1
+    }
+
+    public static int bSearch_UpperBound(int x, int l, int r) {
+        while (l < r) {
+            // 区间长度为2时做特判
+            if (r - l == 1) {
+                if (a[r] == x)
+                    return r;
+                else if (a[l] == x)
+                    return l;
+                else
+                    return -1;
+            }
+            int mid = (l + r) / 2;
+            if (a[mid] <= x)
+                l = mid;
+            else
+                r = mid - 1;
+        }
+        return a[l] == x ? l : -1;
     }
 }
